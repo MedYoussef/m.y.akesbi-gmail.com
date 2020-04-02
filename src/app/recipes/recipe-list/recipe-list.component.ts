@@ -10,7 +10,9 @@ export class RecipeListComponent implements OnInit {
 
   constructor() { }
   recipes: Recipe[] = [
-    new Recipe('Couscous','Plat Marocain', 'https://images.app.goo.gl/CDThv8tuZU43vMCL9')
+    new Recipe('Couscous','Cuisine Marocaine', 'https://upload.wikimedia.org/wikipedia/commons/5/56/Couscous_Moroc.JPG'),
+    new Recipe('Paella','Cuisine Espagnole', 'https://storage.needpix.com/rsynced_images/cuisine-1740965_1280.jpg')
+
   ]; 
   ngOnInit(): void {
   }
