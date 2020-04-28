@@ -13,7 +13,7 @@
         <div class="btn-group">
             <button class="btn btn-success" (click)="AddToChoppingList()">Add To Shopping List</button>
             <button class="btn btn-primary" [routerLink]="['edit']" routerLinkActive="router-link-active" >Edit Recipe</button>
-            <button class="btn btn-danger">Delete Recipe</button>
+            <button class="btn btn-danger" (click)="DeleteRecipe()" >Delete Recipe</button>
         </div>
     </div>
 </div>

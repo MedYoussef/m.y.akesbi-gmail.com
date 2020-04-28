@@ -10,6 +10,7 @@ export class RecipeItemComponent implements OnInit {
 
   //@Output() recipeEmitted = new EventEmitter<void>()
   @Input() recipe : Recipe;
+  @Input() id : number;
   constructor() { }
 
   ngOnInit(): void {

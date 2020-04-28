@@ -17,11 +17,15 @@ ingredients : Ingredient[] = [];
     this.ingredients = this.shoppinglistservice.ingredients;
   }
 
-  OnIngredientAdded(ingredient: Ingredient){
-    this.shoppinglistservice.AddIngredient(ingredient);
-    this.sub = this.shoppinglistservice.ingredientSelected.subscribe(
-      (ingredients: Ingredient[]) => {
-      this.ingredients = ingredients;
-    });
+  // OnIngredientAdded(ingredient: Ingredient){
+  //   this.shoppinglistservice.AddIngredient(ingredient);
+  //   this.sub = this.shoppinglistservice.ingredientSelected.subscribe(
+  //     (ingredients: Ingredient[]) => {
+  //     this.ingredients = ingredients;
+  //   });
+  // }
+
+  SelectIngredient(index: number){
+    this.shoppinglistservice.SelectedIngredient.next(index);
   }
 }
