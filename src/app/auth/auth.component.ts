@@ -1,23 +1,32 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ComponentFactoryResolver, ViewChild, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService, AuthResponse } from '../services/auth.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { AlertComponent } from '../alert/alert.component';
+import { PlaceholderDirective } from '../directives/placeholder.directive';
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.css']
 })
-export class AuthComponent implements OnInit {
+export class AuthComponent implements OnInit, OnDestroy {
+  ngOnDestroy(): void {
+    if(this.sub){
+      this.sub.unsubscribe();
+    }
+  }
 
+  sub : Subscription;
   logindMode : boolean = true;
   authForm : FormGroup;
   isLoading : boolean = false;
   error : string = null;
   signedUp : boolean = false;
   authObs : Observable<AuthResponse>;
-  constructor(private authService : AuthService, private router : Router) { }
+  @ViewChild(PlaceholderDirective, {static : false} ) alertHost : PlaceholderDirective;
+  constructor(private authService : AuthService, private router : Router, private componentFactoryResolver : ComponentFactoryResolver) { }
 
   ngOnInit(): void {
     this.authForm = new FormGroup({
@@ -26,6 +35,9 @@ export class AuthComponent implements OnInit {
     });
   }
 
+  HandleError(){
+    this.error = null;
+  }
 
   OnSwitchMode(){
     this.logindMode = !this.logindMode;
@@ -44,6 +56,7 @@ export class AuthComponent implements OnInit {
         console.log('routage');
       }, errorMessage => {
         this.error = errorMessage;
+        this.ShowError(errorMessage);
         this.isLoading = !this.isLoading;
       });
     }
@@ -54,11 +67,25 @@ export class AuthComponent implements OnInit {
         setTimeout(() => this.signedUp = false, 1000);
       }, errorMessage => {
         this.error = errorMessage;
+        this.ShowError(errorMessage);
         this.isLoading = !this.isLoading;
       });
       
       this.authForm.reset();
     }
+  }
+
+  // Creer un component de manière dynamique
+   private ShowError(errorMessage : string){
+    const alertFactory = this.componentFactoryResolver.resolveComponentFactory(AlertComponent);
+    const hostViewContainerRef = this.alertHost.viewContainerRef
+    hostViewContainerRef.clear();
+    const componentRef = hostViewContainerRef.createComponent(alertFactory);
+    componentRef.instance.message = errorMessage;
+    this.sub = componentRef.instance.close.subscribe(()=>{
+      this.sub.unsubscribe();
+      hostViewContainerRef.clear();
+    });
   }
 
 }
