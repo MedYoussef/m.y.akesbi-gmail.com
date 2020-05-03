@@ -3,17 +3,16 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { ShoppingListComponent } from './shopping-list/shopping-list.component';
 import { RecipesComponent } from './recipes/recipes.component';
-import { componentFactoryName } from '@angular/compiler';
-import { RecipeItemComponent } from './recipes/recipe-list/recipe-item/recipe-item.component';
 import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.component';
 import { RecipeDetailComponent } from './recipes/recipe-detail/recipe-detail.component';
 import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 import { RecipesResolverService } from './services/recipes-resolver.service';
 import { AuthComponent } from './auth/auth.component';
+import { AuthGuard } from './auth.guard';
 
 const appRoutes : Routes = [
   {path: '', redirectTo : '/recipes', pathMatch : 'full'},
-  {path : 'recipes', component : RecipesComponent, children : [
+  {path : 'recipes', component : RecipesComponent, canActivate: [AuthGuard] ,children : [
     {path : '', component : RecipeStartComponent, resolve: [RecipesResolverService]},
     {path : 'new', component : RecipeEditComponent},
     {path : ':id/edit', component : RecipeEditComponent, resolve: [RecipesResolverService]},
