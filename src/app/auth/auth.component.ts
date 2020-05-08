@@ -16,9 +16,11 @@ export class AuthComponent implements OnInit, OnDestroy {
     if(this.sub){
       this.sub.unsubscribe();
     }
+    this.logInSub.unsubscribe();
   }
 
   sub : Subscription;
+  logInSub : Subscription;
   logindMode : boolean = true;
   authForm : FormGroup;
   isLoading : boolean = false;
@@ -49,7 +51,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     const userEmail = this.authForm.value['email'];
     const userPassword = this.authForm.value['password'];
     if(this.logindMode) {
-      this.authService.LogIn(userEmail, userPassword).subscribe(res => {
+      this.logInSub = this.authService.LogIn(userEmail, userPassword).subscribe(res => {
         this.isLoading = !this.isLoading;
         console.log(res);
         this.router.navigate(['/recipes']);
@@ -61,7 +63,7 @@ export class AuthComponent implements OnInit, OnDestroy {
       });
     }
     else{
-      this.authService.SignUp(userEmail, userPassword).subscribe(res => {
+      this.logInSub = this.authService.SignUp(userEmail, userPassword).subscribe(res => {
         this.isLoading = !this.isLoading;
         this.signedUp = true;
         setTimeout(() => this.signedUp = false, 1000);
@@ -75,7 +77,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Creer un component de manière dynamique
+ // Creer un component de manière dynamique
    private ShowError(errorMessage : string){
     const alertFactory = this.componentFactoryResolver.resolveComponentFactory(AlertComponent);
     const hostViewContainerRef = this.alertHost.viewContainerRef
@@ -83,7 +85,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     const componentRef = hostViewContainerRef.createComponent(alertFactory);
     componentRef.instance.message = errorMessage;
     this.sub = componentRef.instance.close.subscribe(()=>{
-      this.sub.unsubscribe();
+      //this.sub.unsubscribe();
       hostViewContainerRef.clear();
     });
   }

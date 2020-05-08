@@ -10,20 +10,11 @@ import { Subscription } from 'rxjs';
 })
 export class ShoppingListComponent implements OnInit{
 ingredients : Ingredient[] = [];
-  private sub : Subscription;
   constructor(private shoppinglistservice : ShoppingListService) { }
 
   ngOnInit(): void {
     this.ingredients = this.shoppinglistservice.ingredients;
   }
-
-  // OnIngredientAdded(ingredient: Ingredient){
-  //   this.shoppinglistservice.AddIngredient(ingredient);
-  //   this.sub = this.shoppinglistservice.ingredientSelected.subscribe(
-  //     (ingredients: Ingredient[]) => {
-  //     this.ingredients = ingredients;
-  //   });
-  // }
 
   SelectIngredient(index: number){
     this.shoppinglistservice.SelectedIngredient.next(index);

@@ -1,25 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
 import { RecipeService } from 'src/app/services/recipe.service';
 import { Recipe } from '../recipe.model';
 import { Ingredient } from 'src/app/shopping-list/ingredient.model';
-import { ShoppingListService } from 'src/app/services/shopping-list.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-recipe-edit',
   templateUrl: './recipe-edit.component.html',
   styleUrls: ['./recipe-edit.component.css']
 })
-export class RecipeEditComponent implements OnInit {
+export class RecipeEditComponent implements OnInit, OnDestroy {
+  ngOnDestroy(): void {
+    this.routeSub.unsubscribe();
+  }
 
   constructor(private router : Router, private route : ActivatedRoute, private recipeService : RecipeService) { }
   id : number;
   editMode = false;
   recipeForm : FormGroup;
   recipeEdit : Recipe;
+  routeSub : Subscription;
+  message : string = null;
+  error : string = null;
   ngOnInit(): void {
-    this.route.params.subscribe(
+    this.routeSub = this.route.params.subscribe(
       (params : Params) => {
         this.id = +params['id'];
         this.editMode = params['id'] != null ? true : false;
@@ -42,12 +48,24 @@ export class RecipeEditComponent implements OnInit {
       ingredientsToAdd)
 
     if(this.editMode){
-      this.recipeService.EditRecipe(this.id, newRecipe);
+      try {
+        this.recipeService.EditRecipe(this.id, newRecipe);
+        this.message = 'Recipe updated';
+      } catch (error) {
+        this.error = 'An error occured';
+      }
     }
     else{
+      try {
       this.recipeService.AddRecipe(newRecipe);
+      this.message = 'Recipe added';
+      } catch (error) {
+        this.error = 'An error occured';
+      }
     }
-    this.router.navigate(['../']);
+    setTimeout(()=>{
+      this.router.navigate(['recipes']);
+    }, 2000)
 
   }
   DeleteIngredient(index : number){

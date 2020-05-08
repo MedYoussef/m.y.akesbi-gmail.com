@@ -1,21 +1,25 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { RecipeService } from './recipe.service';
 import { Recipe } from '../recipes/recipe.model';
 import {map, tap, take, exhaustMap} from 'rxjs/operators';
 import { AuthService } from './auth.service';
+import { Subscription } from 'rxjs';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class DataStorageService {
-
+export class DataStorageService implements OnDestroy{
+  ngOnDestroy(): void {
+    this.sub.unsubscribe();
+  }
+  sub : Subscription;
   constructor(private http : HttpClient, private recipeService : RecipeService, private authService : AuthService) { }
 
   PostRecipe(){
     const recipes = this.recipeService.recipes;
-    this.http.put('https://recipebook-ada03.firebaseio.com/recipes.json', recipes).subscribe(res => {
+    this.sub = this.http.put('https://recipebook-ada03.firebaseio.com/recipes.json', recipes).subscribe(res => {
       console.log(res);
     });
   }

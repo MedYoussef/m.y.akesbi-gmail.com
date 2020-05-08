@@ -8,6 +8,12 @@
         <h1>Recipe Details : {{recipe.Name}} </h1>
     </div>
 </div>
+<div class="alert alert-success" *ngIf="ingredientsAdded">
+    <p>Ingredients added successfully</p>
+</div>
+<div class="alert alert-danger" *ngIf="error">
+    <p>{{error}}</p>
+</div>
 <div class="row">
     <div class="col-xs-12">
         <div class="btn-group">

@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ShoppingListComponent } from './shopping-list.component';
 import { ShoppingEditComponent } from './shopping-edit/shopping-edit.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { RouterModule, PreloadingStrategy, PreloadAllModules } from '@angular/router';
+import { RouterModule} from '@angular/router';
 
 
 
@@ -11,6 +11,7 @@ import { RouterModule, PreloadingStrategy, PreloadAllModules } from '@angular/ro
   declarations: [ShoppingListComponent,ShoppingEditComponent],
   imports: [
     CommonModule, ReactiveFormsModule, FormsModule, RouterModule.forChild([{path : 'shoppinglist', component : ShoppingListComponent }] )
-  ]
+  ],
+  exports : [ShoppingListComponent,ShoppingEditComponent ,RouterModule]
 })
 export class ShoppingListModule { }

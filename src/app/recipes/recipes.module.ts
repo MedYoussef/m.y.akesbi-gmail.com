@@ -20,14 +20,14 @@ import { RouterModule } from '@angular/router';
     RecipeStartComponent,
     RecipeEditComponent],
   imports: [
-    CommonModule, ReactiveFormsModule, FormsModule, RouterModule
+    CommonModule, ReactiveFormsModule,FormsModule ,RouterModule
   ],
-  exports : 
-  [RecipesComponent,
-    RecipeListComponent,
-    RecipeDetailComponent,
-    RecipeItemComponent,
-    RecipeStartComponent,
-    RecipeEditComponent]
+  exports : []
+  // [RecipesComponent,
+  //   RecipeListComponent,
+  //   RecipeDetailComponent,
+  //   RecipeItemComponent,
+  //   RecipeStartComponent,
+  //   RecipeEditComponent]
 })
 export class RecipesModule { }
